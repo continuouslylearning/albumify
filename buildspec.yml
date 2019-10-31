@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      golang: 1.13
+    commands:
+    - echo Install phase
+  build:
+    commands:
+    # build Go executable
+    - cd api 
+    - go build -o bin/application main.go
+    
+artifacts:
+  files:
+    - api/bin/application
+  discard-paths: yes
