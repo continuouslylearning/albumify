@@ -3,7 +3,7 @@ package database
 import (
 	"os"
 
-	. "github.com/continuouslylearning/mosaic/api/models"
+	. "github.com/continuouslylearning/mosaic/api/users"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )

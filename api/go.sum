@@ -2,6 +2,7 @@ github.com/aws/aws-sdk-go v1.28.9 h1:grIuBQc+p3dTRXerh5+2OxSuWFi0iXuxbFdTSg0jaW0
 github.com/aws/aws-sdk-go v1.28.9/go.mod h1:KmX6BPdI08NWTb3/sm4ZGu5ShLoqVDhKgpiN924inxo=
 github.com/continuouslylearning/go-rest-api v0.0.0-20200203210533-8dd78bc133ca h1:VZee7bl6Lk0aNIFO+Oh9afu/5e3xlOy1kAZDBHrBNog=
 github.com/continuouslylearning/mosaic v0.0.0-20200203222534-e5584d3ab14b h1:tQPyZNW3rkcDD1uX0cFYbL1DY+CaTPZCjUViriKf0NU=
+github.com/continuouslylearning/mosaic v0.0.0-20200205174607-33a639e279f0 h1:wEUL0R2S1kBEWC9xM3Gl4PUrk0t7cI9+8VjrMdn0RH0=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

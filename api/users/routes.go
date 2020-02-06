@@ -3,7 +3,6 @@ package users
 import (
 	"net/http"
 
-	. "github.com/continuouslylearning/mosaic/api/models"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
