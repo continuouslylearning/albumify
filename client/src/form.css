@@ -1,0 +1,37 @@
+.form button {
+	background-color: black;
+	border: solid black;
+	border-radius: 6px;
+	color: white;
+	font-family: Lobster;
+	font-size: 24px;
+	height: 3em;
+	width: 100%;
+}
+
+.form button:hover {
+	cursor: pointer;
+	filter: brightness(.80);
+}
+
+.form input {
+	background: transparent;
+	border: 0;
+	border-bottom: 1px solid black;
+	font-size: 1em;
+	outline: 0;
+	margin-bottom: 2em;
+	width: 100%;
+}
+
+.form label {
+	font-size: 25px;
+}
+
+.form {
+	font-family: Lobster;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	height: 100%;
+}
