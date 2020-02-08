@@ -20,6 +20,11 @@ func createToken(user *User) (string, error) {
 	return signedToken, e
 }
 
+func hashPassword(password string) (string, error) {
+	hash, e := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
+	return string(hash), e
+}
+
 func verifyToken(signedToken string) (jwt.MapClaims, error) {
 	token, e := jwt.Parse(signedToken, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {

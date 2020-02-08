@@ -1,10 +1,13 @@
 package album
 
 import (
+	"github.com/continuouslylearning/mosaic/api/users"
 	"github.com/gin-gonic/gin"
 )
 
 func GroupAlbumRoutes(r *gin.Engine) {
-	r.GET("/album", getAlbum)
-	r.POST("/album", postImages)
+	albumRoutes := r.Group("/album")
+	albumRoutes.Use(users.JwtAuth())
+	albumRoutes.GET("/", getAlbum)
+	albumRoutes.POST("/", postImages)
 }

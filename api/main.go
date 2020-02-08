@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/continuouslylearning/mosaic/api/album"
 	"github.com/continuouslylearning/mosaic/api/database"
-	"github.com/continuouslylearning/mosiac/api/users"
+	"github.com/continuouslylearning/mosaic/api/users"
 
 	"os"
 
@@ -28,7 +28,6 @@ func main() {
 	database.InitializeDB(r)
 	database.InitializeS3Handler(r)
 
-	auth.GroupAuthRoutes(r)
 	users.GroupUserRoutes(r)
 	album.GroupAlbumRoutes(r)
 

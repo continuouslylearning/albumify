@@ -9,7 +9,7 @@ import (
 
 func loginUser(c *gin.Context) {
 	token := c.MustGet("token").(string)
-	c.JSON(http.StatusCreated, map[string]string{
+	c.JSON(http.StatusCreated, gin.H{
 		"authToken": token,
 	})
 }
