@@ -1,36 +1,57 @@
 header {
+    background-image: url('./images/background.jpg');
+    color: white;
+    display: flex;
+    justify-content: center;
     align-items: center;
-    background-color: white;
+    font-family: 'Dancing Script', 'cursive';
+    grid-template-columns: 20% 1fr 20%;
+    height: 80px;
+    position: fixed;
+    text-align: center;
+    user-select: none;
+    width: 100%;
+    z-index: 1;
+}
+
+.header-items {
+    align-items: center;
     display: flex;
     flex-direction: row;
-    font-family: 'Dancing Script', 'cursive';
-    height: 80px;
     justify-content: flex-start;
-    margin: 0px;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    height: 100%;
+    max-width: 1020px;
     padding: 0px;
-    position: fixed;
+    position: absolute;
     width: 100%;
+}
+
+@media (max-width: 800px) {
+	.header-items {
+		/* grid-template-columns: 5% 1fr 5%;
+        width: 100%; */
+        width: 90%;
+	}
 }
 
 header h1 {
     font-size: 55px;
     margin-bottom: 0px;
-    margin-left: 80px;
+    margin-left: 0px;
     margin-top: 0px;
     padding: 0px;
 }
 
-header button {
+header img {
+    cursor: pointer;
+    filter: invert(100%);
     margin-left: auto;
-    margin-right: 80px;
+    margin-right: 0px;
+    height: 70%;
 }
 
-@media only screen and (max-device-width: 480px) {
-    header h1 {
-        margin-left: 5%;
-    }
-
-    header button {
-        margin-right: 5%;
-    }
+header img:hover {
+    height: 85%;
 }
