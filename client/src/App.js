@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Album from './Album';
+import Header from './Header';
 import Landing from './Landing';
 
 class App extends React.Component {
@@ -8,7 +9,12 @@ class App extends React.Component {
         const { loggedIn } = this.props;
 
         if (loggedIn) {
-            return <Album/>;
+            return (
+                <>  
+                    <Header/>
+                    <Album/>
+                </>
+            );
         }
 
         return <Landing/>;

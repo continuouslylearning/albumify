@@ -20,7 +20,7 @@
 .album-container {
 	display: grid;
 	grid-template-columns: 20% 1fr 20%;
-	grid-template-rows: auto 1fr;
+	grid-template-rows: 80px 1fr;
 	height: 100%;
 	width: 100%;
 }
@@ -28,7 +28,7 @@
 @media (max-width: 800px) {
 	.album-container {
 		grid-template-columns: 5% 1fr 5%;
-		grid-template-rows: auto 1fr;
+		grid-template-rows: 80px 1fr;
 		height: 100%;
 		width: 100%;
 	}
