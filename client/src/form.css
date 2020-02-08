@@ -1,9 +1,9 @@
 .form button {
 	background-color: black;
-	border: solid black;
+	border: 0px;
 	border-radius: 6px;
 	color: white;
-	font-family: Lobster;
+	font-family: 'Dancing Script', 'cursive';
 	font-size: 24px;
 	height: 3em;
 	width: 100%;
@@ -11,7 +11,7 @@
 
 .form button:hover {
 	cursor: pointer;
-	filter: brightness(.80);
+	background-color: #990000;
 }
 
 .form input {
@@ -29,7 +29,7 @@
 }
 
 .form {
-	font-family: Lobster;
+	font-family: 'Dancing Script', 'cursive';
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;

@@ -41,7 +41,7 @@ func AddS3Handler(h *S3Handler) gin.HandlerFunc {
 }
 
 func (h S3Handler) UploadImage(key string, body []byte) error {
-	_, err := s3.New(h.Session).PutObject(&s3.PutObjectInput{
+	_, e := s3.New(h.Session).PutObject(&s3.PutObjectInput{
 		Bucket:               aws.String(h.Bucket),
 		Key:                  aws.String("twice/" + key),
 		ACL:                  aws.String("private"),
@@ -52,16 +52,20 @@ func (h S3Handler) UploadImage(key string, body []byte) error {
 		ServerSideEncryption: aws.String("AES256"),
 	})
 
-	return err
+	return e
 }
 
 func (h S3Handler) GetImages() ([]string, error) {
-	res, _ := s3.New(h.Session).ListObjects(&s3.ListObjectsInput{
+	res, e := s3.New(h.Session).ListObjects(&s3.ListObjectsInput{
 		Bucket:    aws.String(h.Bucket),
 		Delimiter: aws.String("/"),
 		MaxKeys:   aws.Int64(18),
 		Prefix:    aws.String("twice/"),
 	})
+
+	if e != nil {
+		return nil, e
+	}
 
 	var keys []string
 	for _, object := range res.Contents {

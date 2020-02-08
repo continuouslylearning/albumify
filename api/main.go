@@ -5,6 +5,7 @@ import (
 	"github.com/continuouslylearning/mosaic/api/database"
 	"github.com/continuouslylearning/mosaic/api/users"
 
+	"fmt"
 	"os"
 
 	"github.com/gin-contrib/cors"
@@ -13,9 +14,9 @@ import (
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		panic("Could not load Environmental Variables")
+	e := godotenv.Load()
+	if e != nil {
+		fmt.Println(e)
 	}
 
 	r := gin.New()
@@ -23,7 +24,12 @@ func main() {
 	config := cors.DefaultConfig()
 	clientOrigin := os.Getenv("CLIENT_ORIGIN")
 	config.AllowOrigins = []string{clientOrigin}
-	r.Use(cors.New(config))
+
+	r.Use(cors.New(cors.Config{
+		AllowOrigins: []string{clientOrigin},
+		AllowMethods: []string{"GET", "OPTIONS", "POST"},
+		AllowHeaders: []string{"Authorization", "Content-Length", "Content-Type", "Origin"},
+	}))
 
 	database.InitializeDB(r)
 	database.InitializeS3Handler(r)

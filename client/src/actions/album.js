@@ -27,7 +27,13 @@ export const getAlbumError = (error) => {
 export const getAlbum = () => async (dispatch, getState) => {
 	dispatch(getAlbumRequest());
 	try {
-		const { data } = await axios.get(SERVER_URI + '/album');
+		const authToken = getState().auth.authToken;
+		const config = {
+			headers: {
+				'Authorization': `Bearer ${authToken}`
+			}
+		};
+		const { data } = await axios.get(SERVER_URI + '/album/', config);
 		dispatch(getAlbumSuccess(data));
 	} catch(e) {
 		dispatch(getAlbumError(e));
@@ -62,6 +68,7 @@ export const postImages = (images) => async (dispatch, getState) => {
 
 	try {
 		const formData = new FormData();
+		const authToken = getState().auth.authToken;
 		
 		for (let i = 0; i < images.length; i++) {
 			const image = images[i];
@@ -70,10 +77,11 @@ export const postImages = (images) => async (dispatch, getState) => {
 		
 		const config = {
 			headers: {
-				'Content-Type': 'multipart/form-data'
+				'Authorization': `Bearer + ${authToken}`,
+				'Content-Type': 'multipart/form-data',
 			}
 		};
-		const { data } = await axios.post(SERVER_URI + '/album', formData, config);
+		const { data } = await axios.post(SERVER_URI + '/album/', formData, config);
 		
 		dispatch(postImagesSuccess(data));
 	} catch(e) {

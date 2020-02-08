@@ -33,10 +33,12 @@ export const authError = error => ({
 });
 
 const storeAuthInfo = (authToken, dispatch) => {
+    console.log(authToken);
 	const decodedToken = jwtDecode(authToken);
 	// dispatch(setAuthToken(authToken));
 	// dispatch(authSuccess(decodedToken.user));
-	// saveAuthToken(authToken);
+    // saveAuthToken(authToken);
+    console.log(decodedToken);
 };
 
 export const login = ({ username, password }) => (dispatch, getState) => {
@@ -44,7 +46,7 @@ export const login = ({ username, password }) => (dispatch, getState) => {
     
     return axios({
 		method: 'post',
-		url: `${SERVER_URI}/auth/login`,
+		url: `${SERVER_URI}/login`,
 		headers: { 'Content-Type': 'application/json' },
 		data: { username, password }
 	})	
