@@ -16,3 +16,8 @@ func (u *User) Normalize() map[string]interface{} {
 		"username": u.Username,
 	}
 }
+
+type LoginRequest struct {
+	Username string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}

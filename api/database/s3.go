@@ -73,12 +73,16 @@ func (h S3Handler) GetImages() ([]string, error) {
 	}
 
 	images := make([]string, 0, len(keys))
+	var signedURL string
 	for _, key := range keys {
 		req, _ := s3.New(h.Session).GetObjectRequest(&s3.GetObjectInput{
 			Bucket: aws.String(h.Bucket),
 			Key:    aws.String(key),
 		})
-		signedURL, _ := req.Presign(60 * time.Minute)
+		signedURL, e = req.Presign(60 * time.Minute)
+		if e != nil {
+			return nil, e
+		}
 		images = append(images, signedURL)
 	}
 

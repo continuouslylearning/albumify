@@ -39,11 +39,6 @@ func JwtAuth() gin.HandlerFunc {
 }
 
 func localAuth(c *gin.Context) {
-	type LoginRequest struct {
-		Username string `json:"username" binding:"required"`
-		Password string `json:"password" binding:"required"`
-	}
-
 	db := c.MustGet("db").(*gorm.DB)
 	var req LoginRequest
 	var user User
