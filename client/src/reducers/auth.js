@@ -1,10 +1,42 @@
+import { AUTH_ERROR, AUTH_REQUEST, AUTH_SUCCESS, CLEAR_AUTH, SET_AUTH_TOKEN } from '../actions/auth';
+
 const initialState = {
-    authToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODE3Mzk3NzIsInVzZXIiOnsiSUQiOjE2LCJ1c2VybmFtZSI6InRpbW90aHkifX0.Ke2O1Oc1JTrJHXEksgbMBb1XHlFADSH3y_ly9_4cTqs',
-    error: null,
-    loading: false,
-    user: null
+	authToken: null,
+	error: null,
+	loading: false,
+	user: null
 };
 
 export default (state = initialState, action) => {
-    return state;
+	if (action.type === AUTH_ERROR) {
+		return {
+			...state,
+			error: action.error,
+			loading: false
+		};
+	} else if (action.type === AUTH_REQUEST) {
+		return {
+			...state,
+			error: null,
+			loading: true
+		};
+	} else if (action.type === AUTH_SUCCESS) {
+		return {
+			...state,
+			loading: false,
+			user: action.user
+		};
+	} else if (action.type === CLEAR_AUTH) {
+		return {
+			...state,
+			authToken: null,
+			user: null
+		};
+	} else if (action.type ===  SET_AUTH_TOKEN) {
+		return {
+			...state,
+			authToken: action.authToken
+		};
+	}
+	return state;
 };

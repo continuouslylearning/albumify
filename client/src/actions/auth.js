@@ -3,16 +3,12 @@ import jwtDecode from 'jwt-decode';
 import axios from 'axios';
 import { SubmissionError } from 'redux-form';
 import { SERVER_URI } from '../config';
+import { saveAuthToken } from '../utils';
 
-export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
-export const setAuthToken = authToken => ({
-	type: SET_AUTH_TOKEN,
-	authToken
-});
-
-export const CLEAR_AUTH = 'CLEAR_AUTH';
-export const clearAuth = () => ({
-	type: CLEAR_AUTH
+export const AUTH_ERROR = 'AUTH_ERROR';
+export const authError = error => ({
+	type: AUTH_ERROR,
+	error
 });
 
 export const AUTH_REQUEST = 'AUTH_REQUEST';
@@ -26,46 +22,44 @@ export const authSuccess = user => ({
 	user
 });
 
-export const AUTH_ERROR = 'AUTH_ERROR';
-export const authError = error => ({
-	type: AUTH_ERROR,
-	error
+export const CLEAR_AUTH = 'CLEAR_AUTH';
+export const clearAuth = () => ({
+	type: CLEAR_AUTH
+});
+
+export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
+export const setAuthToken = authToken => ({
+	type: SET_AUTH_TOKEN,
+	authToken
 });
 
 const storeAuthInfo = (authToken, dispatch) => {
-    console.log(authToken);
 	const decodedToken = jwtDecode(authToken);
-	// dispatch(setAuthToken(authToken));
-	// dispatch(authSuccess(decodedToken.user));
-    // saveAuthToken(authToken);
-    console.log(decodedToken);
+	dispatch(setAuthToken(authToken));
+	dispatch(authSuccess(decodedToken.username));
+	saveAuthToken(authToken);
 };
 
-export const login = ({ username, password }) => (dispatch, getState) => {
+export const login = ({ username, password }) => async (dispatch, getState) => {
 	dispatch(authRequest());
-    
-    return axios({
-		method: 'post',
-		url: `${SERVER_URI}/login`,
-		headers: { 'Content-Type': 'application/json' },
-		data: { username, password }
-	})	
-		.then(res => storeAuthInfo(res.data.authToken, dispatch))
-		.catch(err => {
-			// if server does not respond to the request, err object does not have a response property
-			let message;
-			if (!err.response || err.response.status === 500) {
-				message = 'Unable to login. Please try again later.';
-			} else {
-				message = err.response.data.message;
-			}
-
-            // return Promise.reject(
-            //     new SubmissionError({
-            //         _error: message
-            //     })
-            // );
-
-			dispatch(authError({ message }));
+	
+	try {
+		const res = await axios({
+			method: 'post',
+			url: `${SERVER_URI}/login`,
+			data: { username, password },
+			headers: { 'Content-Type': 'application/json' }
 		});
+		
+		storeAuthInfo(res.data.authToken, dispatch);
+	} catch (e) {
+		let message;
+		if (!e.response || e.response.status === 500) {
+			message = 'Unable to login. Please try again later.';
+		} else {
+			message = e.response.data.message;
+		}
+
+		dispatch(authError({ message }));
+	}
 };

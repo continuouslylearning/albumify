@@ -16,8 +16,10 @@ class App extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+    const { user } = state.auth;
+
     return {
-        loggedIn: true
+        loggedIn: user !== null
     };
 };
 
