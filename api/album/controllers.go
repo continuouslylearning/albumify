@@ -9,8 +9,9 @@ import (
 )
 
 func getAlbum(c *gin.Context) {
+	username := c.MustGet("username").(string)
 	s3 := c.MustGet("s3").(*database.S3Handler)
-	objects, e := s3.GetImages()
+	objects, e := s3.GetImages(username)
 	if e != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 	}
@@ -19,12 +20,13 @@ func getAlbum(c *gin.Context) {
 }
 
 func postImages(c *gin.Context) {
+	username := c.MustGet("username").(string)
 	s3 := c.MustGet("s3").(*database.S3Handler)
 	form, _ := c.MultipartForm()
 	for name, file := range form.File {
 		fileContent, _ := file[0].Open()
 		body, _ := ioutil.ReadAll(fileContent)
-		e := s3.UploadImage(name, body)
+		e := s3.UploadImage(name, body, username)
 		if e != nil {
 			c.AbortWithStatus(http.StatusInternalServerError)
 		}

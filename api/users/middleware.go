@@ -29,11 +29,15 @@ func JwtAuth() gin.HandlerFunc {
 			return
 		}
 
-		_, e := verifyToken(token)
+		claims, e := verifyToken(token)
 		if e != nil {
 			c.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
+
+		user := claims["user"].(map[string]interface{})
+		username := user["username"]
+		c.Set("username", username)
 		c.Next()
 	}
 }

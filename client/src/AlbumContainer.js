@@ -5,6 +5,9 @@ import { connect } from 'react-redux';
 import Album from './Album';
 import { getAlbum, postImages} from './actions/album';
 
+const style = {
+    height: '100%'
+};
 
 class AlbumContainer extends React.Component {
     onDrop = (files) => {
@@ -14,20 +17,18 @@ class AlbumContainer extends React.Component {
 
     render = () => {
         return (
-            <div>
-                <DropZone
-                    onDrop={this.onDrop}
-                >   
-                    { ({getRootProps, getInputProps}) => 
-                        (   
-                            <div {...getRootProps()}>
-                                {/* <input {...getInputProps()}/> */}
-                                <Album/>
-                            </div>
-                        )
-                    }   
-                </DropZone>
-            </div>
+            <DropZone
+                onDrop={this.onDrop}
+                style={style}
+            >   
+                { ({getRootProps, getInputProps}) => 
+                    (   
+                        <div {...getInputProps({ style })} {...getRootProps()}>
+                            <Album/>
+                        </div>
+                    )
+                }   
+            </DropZone>
         );
     }
 }
@@ -41,7 +42,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         getAlbum: () => dispatch(getAlbum()),
-        postImages: (images) => dispatch(postImages(images)),
+        postImages: (images) => dispatch(postImages(images))
     };
 }
 

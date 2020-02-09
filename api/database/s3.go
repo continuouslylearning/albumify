@@ -2,13 +2,15 @@ package database
 
 import (
 	"bytes"
+	"fmt"
+	"net/http"
+	"os"
+	"time"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/gin-gonic/gin"
-	"net/http"
-	"os"
-	"time"
 )
 
 type S3Handler struct {
@@ -40,10 +42,10 @@ func AddS3Handler(h *S3Handler) gin.HandlerFunc {
 	}
 }
 
-func (h S3Handler) UploadImage(key string, body []byte) error {
+func (h S3Handler) UploadImage(key string, body []byte, username string) error {
 	_, e := s3.New(h.Session).PutObject(&s3.PutObjectInput{
 		Bucket:               aws.String(h.Bucket),
-		Key:                  aws.String("twice/" + key),
+		Key:                  aws.String(fmt.Sprintf("%s/%s", username, key)),
 		ACL:                  aws.String("private"),
 		Body:                 bytes.NewReader(body),
 		ContentLength:        aws.Int64(int64(len(body))),
@@ -55,14 +57,13 @@ func (h S3Handler) UploadImage(key string, body []byte) error {
 	return e
 }
 
-func (h S3Handler) GetImages() ([]string, error) {
+func (h S3Handler) GetImages(username string) ([]string, error) {
 	res, e := s3.New(h.Session).ListObjects(&s3.ListObjectsInput{
 		Bucket:    aws.String(h.Bucket),
 		Delimiter: aws.String("/"),
 		MaxKeys:   aws.Int64(18),
-		Prefix:    aws.String("twice/"),
+		Prefix:    aws.String(fmt.Sprintf("%s/", username)),
 	})
-
 	if e != nil {
 		return nil, e
 	}

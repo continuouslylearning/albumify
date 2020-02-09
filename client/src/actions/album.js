@@ -77,7 +77,7 @@ export const postImages = (images) => async (dispatch, getState) => {
 		
 		const config = {
 			headers: {
-				'Authorization': `Bearer + ${authToken}`,
+				'Authorization': `Bearer ${authToken}`,
 				'Content-Type': 'multipart/form-data',
 			}
 		};

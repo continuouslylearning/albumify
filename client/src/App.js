@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Album from './Album';
+import AlbumContainer from './AlbumContainer';
 import Header from './Header';
 import Landing from './Landing';
+import './App.css';
 
 class App extends React.Component {
     render = () => {
@@ -12,7 +13,7 @@ class App extends React.Component {
             return (
                 <>  
                     <Header/>
-                    <Album/>
+                    <AlbumContainer/>
                 </>
             );
         }
@@ -22,10 +23,10 @@ class App extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    const { user } = state.auth;
+    const { authToken } = state.auth;
 
     return {
-        loggedIn: user !== null
+        loggedIn: authToken != null
     };
 };
 
