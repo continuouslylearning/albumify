@@ -42,16 +42,10 @@ func AddS3Handler(h *S3Handler) gin.HandlerFunc {
 	}
 }
 
-func (h S3Handler) UploadImage(key string, body []byte, username string) error {
-	_, e := s3.New(h.Session).PutObject(&s3.PutObjectInput{
-		Bucket:               aws.String(h.Bucket),
-		Key:                  aws.String(fmt.Sprintf("%s/%s", username, key)),
-		ACL:                  aws.String("private"),
-		Body:                 bytes.NewReader(body),
-		ContentLength:        aws.Int64(int64(len(body))),
-		ContentType:          aws.String(http.DetectContentType(body)),
-		ContentDisposition:   aws.String("attachment"),
-		ServerSideEncryption: aws.String("AES256"),
+func (h S3Handler) DeleteImage(key string, username string) error {
+	_, e := s3.New(h.Session).DeleteObject(&s3.DeleteObjectInput{
+		Bucket: aws.String(h.Bucket),
+		Key:    aws.String(fmt.Sprintf("%s/%s", username, key)),
 	})
 
 	return e
@@ -88,4 +82,19 @@ func (h S3Handler) GetImages(username string) ([]string, error) {
 	}
 
 	return images, nil
+}
+
+func (h S3Handler) UploadImage(key string, body []byte, username string) error {
+	_, e := s3.New(h.Session).PutObject(&s3.PutObjectInput{
+		Bucket:               aws.String(h.Bucket),
+		Key:                  aws.String(fmt.Sprintf("%s/%s", username, key)),
+		ACL:                  aws.String("private"),
+		Body:                 bytes.NewReader(body),
+		ContentLength:        aws.Int64(int64(len(body))),
+		ContentType:          aws.String(http.DetectContentType(body)),
+		ContentDisposition:   aws.String("attachment"),
+		ServerSideEncryption: aws.String("AES256"),
+	})
+
+	return e
 }
