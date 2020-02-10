@@ -2,7 +2,8 @@ import React from 'react';
 import Modal from 'react-modal';
 import { CircleLoader as Loader } from "react-spinners";
 import { connect } from 'react-redux';
-import { getAlbum } from './actions/album';
+import { deleteImage, getAlbum } from './actions/album';
+import { getFileName } from './utils';
 import './Album.css';
 import dragAndDrop from './images/draganddrop.png';
 
@@ -40,6 +41,16 @@ class Album extends React.Component {
 		});
 	}
 
+	onKeyPress = (e) => {
+		const imageSRC = e.target.querySelector('.content').src;
+		const imageKey = getFileName(imageSRC);
+
+		if (e.key === 'Delete') {
+			return this.props.deleteImage(imageKey)
+				.then(() => this.props.getAlbum());
+		}
+	}
+
 	render = () => {
 		const { album, error, fetching } = this.props;
 		const { modalIsOpen, openedImage, isJpg } = this.state;
@@ -74,10 +85,10 @@ class Album extends React.Component {
 							const fileExtension = image.slice(i+1, i+4);
 
 							return (
-								<div className='thumbnail' key={image}> {
+								<div className='thumbnail' key={image} onKeyDown={this.onKeyPress} tabIndex={index}> {
 									fileExtension === 'jpg' ? 
-										<img alt={image} className='thumbnail' key={index} onClick={this.onClick} src={image}/> :
-										<video className='thumbnail' key={index} onClick={this.onClick} src={image}/>
+										<img alt={image} className='content' key={index} onClick={this.onClick} src={image}/> :
+										<video className='content' key={index} onClick={this.onClick} src={image}/>
 									}
 								</div>
 							);
@@ -114,6 +125,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
+		deleteImage: (key) => dispatch(deleteImage(key)),
 		getAlbum: () => dispatch(getAlbum())
 	};
 };

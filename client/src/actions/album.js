@@ -1,6 +1,52 @@
 import axios from "axios";
 import { SERVER_URI } from '../config';
 
+export const DELETE_IMAGE_REQUEST = 'DELETE_IMAGE_REQUEST';
+export const deleteImageRequest = () => {
+	return {
+		type: DELETE_IMAGE_REQUEST
+	};
+}
+
+export const DELETE_IMAGE_SUCCESS = 'DELETE_IMAGE_SUCCESS';
+export const deleteImageSuccess = () => {
+	return {
+		type: DELETE_IMAGE_SUCCESS
+	};
+};
+
+export const DELETE_IMAGE_ERROR = 'DELETE_IMAGE_ERROR';
+export const deleteImageError = (e) => {
+	return {
+		type: DELETE_IMAGE_ERROR
+	};
+};
+
+export const deleteImage = (key) => async (dispatch, getState) => {
+	const authToken = getState().auth.authToken;
+	
+	dispatch(deleteImageRequest());
+
+	try {
+		await axios({
+			method: 'DELETE',
+			url: `${SERVER_URI}/album/`,
+			data: {
+				key
+			},
+			headers: {
+				'Authorization': `Bearer ${authToken}`,
+				'Content-Type': 'application/json',
+
+			}
+		});
+
+		dispatch(deleteImageSuccess());
+	} catch(e) {
+		dispatch(deleteImageError(e));
+	}
+}
+
 export const GET_ALBUM_REQUEST = 'GET_ALBUM_REQUEST';
 export const getAlbumRequest = () => {
 	return {
