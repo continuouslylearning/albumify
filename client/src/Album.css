@@ -14,6 +14,21 @@
 	height: 100%;
 }
 
+.spinner {
+	align-items: center;
+	display: flex;
+	height: 100%;
+	min-height: 60em;
+	justify-content: center;
+	width: 100%;
+}
+
+@media (max-width: 1024px) {
+	.spinner {
+		min-height: 100%;
+	}
+}
+
 @media (max-width: 450px) {
 	.thumbnail {
 		width: 90vw;

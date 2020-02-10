@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
+import { CircleLoader as Loader } from "react-spinners";
 import { connect } from 'react-redux';
 import { getAlbum } from './actions/album';
 import './Album.css';
@@ -47,7 +48,11 @@ class Album extends React.Component {
 		}
 
 		if (fetching) {
-			return <div>LOADING...</div>;
+			return (
+				<div className='spinner'>
+					<Loader loading={fetching}/>
+				</div>
+			);		
 		}
 
 		return (
