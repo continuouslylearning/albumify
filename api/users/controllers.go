@@ -37,5 +37,8 @@ func createUser(c *gin.Context) {
 	digest, _ := hashPassword(newUser.Password)
 	newUser.Password = digest
 	db.Create(&newUser)
-	c.JSON(http.StatusCreated, newUser.Normalize())
+	token, _ := createToken(&newUser)
+	c.JSON(http.StatusCreated, gin.H{
+		"authToken": token,
+	})
 }

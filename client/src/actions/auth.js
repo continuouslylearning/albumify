@@ -41,11 +41,9 @@ const storeAuthInfo = (authToken, dispatch) => {
 };
 
 export const login = ({ username, password }) => async (dispatch, getState) => {
-	dispatch(authRequest());
-	
 	try {
 		const res = await axios({
-			method: 'post',
+			method: 'POST',
 			url: `${SERVER_URI}/login`,
 			data: { username, password },
 			headers: { 'Content-Type': 'application/json' }
@@ -59,8 +57,30 @@ export const login = ({ username, password }) => async (dispatch, getState) => {
 		} else {
 			message = e.response.data.message;
 		}
-		console.log(message);
-		dispatch(authError({ message }));
+
+		throw new SubmissionError({
+				_error: message
+		});
+	}
+};
+
+export const register = ({ username, password }) => async (dispatch, getState) => {
+	try {
+		const res = await axios({
+			method: 'POST',
+			url: `${SERVER_URI}/users`,
+			data: { username, password },
+			headers: { 'Content-Type': 'application/json' }
+		});
+
+		storeAuthInfo(res.data.authToken, dispatch);
+	} catch(e) {
+		let message;
+		if (!e.response || e.response.status === 500) {
+			message = 'Unable to login. Please try again later.';
+		} else {
+			message = e.response.data.message;
+		}
 
 		throw new SubmissionError({
 				_error: message
