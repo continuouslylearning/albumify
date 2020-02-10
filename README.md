@@ -1,1 +1,2 @@
-# Mosaic (Work in Progress)
+# Albumify (Work in Progress)
+

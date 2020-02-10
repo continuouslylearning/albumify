@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/continuouslylearning/mosaic/api/database"
+	"github.com/continuouslylearning/albumify/api/database"
 	"github.com/gin-gonic/gin"
 )
 
@@ -37,6 +37,7 @@ func getAlbum(c *gin.Context) {
 	objects, e := s3.GetImages(username)
 	if e != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
+		return
 	}
 
 	c.JSON(http.StatusOK, objects)
@@ -52,6 +53,7 @@ func postImages(c *gin.Context) {
 		e := s3.UploadImage(name, body, username)
 		if e != nil {
 			c.AbortWithStatus(http.StatusInternalServerError)
+			return
 		}
 	}
 

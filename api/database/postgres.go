@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/continuouslylearning/mosaic/api/users"
+	"github.com/continuouslylearning/albumify/api/users"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"

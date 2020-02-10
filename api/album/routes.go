@@ -1,7 +1,7 @@
 package album
 
 import (
-	"github.com/continuouslylearning/mosaic/api/users"
+	"github.com/continuouslylearning/albumify/api/users"
 	"github.com/gin-gonic/gin"
 )
 

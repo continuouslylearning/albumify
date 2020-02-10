@@ -14,14 +14,18 @@ const style = {
 class AlbumContainer extends React.Component {
 	onDrop = (files) => {
 		const images = files.filter(file => {
-			return /image.*/.test(file.type);
+			return /image.*/.test(file.type) && file.size < 2097152;
 		});
 
 		if (files.length > images.length) {
-			toast.error('Only images can be uploaded', {
+			toast.error('Only images under 2MB can be uploaded', {
 				className: 'toast',
 				position: toast.POSITION.BOTTOM_CENTER
 			});
+		}
+
+		if (images.length === 0) {
+			return;
 		}
 
 		return this.props.postImages(images)

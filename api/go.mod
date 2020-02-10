@@ -1,4 +1,4 @@
-module github.com/continuouslylearning/mosaic/api
+module github.com/continuouslylearning/albumify/api
 
 go 1.13
 

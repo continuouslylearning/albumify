@@ -159,8 +159,10 @@
 	display: block;
 	font-family: 'Dancing Script', 'cursive';
 	font-size: 20px;
+	user-select: none;
 }
 
 .drag-and-drop img {
 	max-width: 95vw;
+	user-select: none;
 }
