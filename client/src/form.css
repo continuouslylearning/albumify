@@ -40,6 +40,14 @@
 	background-color: grey;
 }
 
+.form span {
+	color: #990000;
+	cursor: pointer;
+	font-size: 17px;
+	margin-top: 10px;
+	text-align: right;
+}
+
 .Toastify {
 	height: 100%;
 }

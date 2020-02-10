@@ -4,7 +4,7 @@ import authReducer from './auth';
 import { reducer as formReducer } from 'redux-form';
 
 export default combineReducers({
-    album: albumReducer,
-    auth: authReducer,
-    form: formReducer
+	album: albumReducer,
+	auth: authReducer,
+	form: formReducer
 });

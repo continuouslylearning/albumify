@@ -6,32 +6,32 @@ import Landing from './Landing';
 import './App.css';
 
 class App extends React.Component {
-    render = () => {
-        const { loggedIn } = this.props;
+	render = () => {
+		const { loggedIn } = this.props;
 
-        if (loggedIn) {
-            return (
-                <>  
-                    <Header/>
-                    <AlbumContainer/>
-                </>
-            );
-        }
+		if (loggedIn) {
+			return (
+				<>  
+					<Header/>
+					<AlbumContainer/>
+				</>
+			);
+		}
 
-        return (
-            <>
-                <Landing/>
-            </>
-        );
-    };
+		return (
+			<>
+				<Landing/>
+			</>
+		);
+	};
 }
 
 const mapStateToProps = (state) => {
-    const { authToken } = state.auth;
+	const { authToken } = state.auth;
 
-    return {
-        loggedIn: authToken != null
-    };
+	return {
+		loggedIn: authToken != null
+	};
 };
 
 export default connect(mapStateToProps)(App);
