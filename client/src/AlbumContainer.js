@@ -6,7 +6,8 @@ import Album from './Album';
 import { getAlbum, postImages} from './actions/album';
 
 const style = {
-    height: '100%'
+    height: 'auto',
+    minHeight: '100%'
 };
 
 class AlbumContainer extends React.Component {
