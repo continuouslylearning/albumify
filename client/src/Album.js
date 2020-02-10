@@ -14,9 +14,8 @@ class Album extends React.Component {
 		super(props);
 
 		this.state = {
-			modalisOpen: false,
-			openedImage: null,
-			isJpg: null
+			modalIsOpen: false,
+			openedImage: null
 		};
 	}
 
@@ -31,13 +30,9 @@ class Album extends React.Component {
 	}
 
 	onClick = (e) => {
-		const i = e.target.src.lastIndexOf(".");
-		const fileExtension = e.target.src.slice(i+1, i+4);
-
 		this.setState({
 			modalIsOpen: true,
-			openedImage: e.target.src,
-			isJpg: fileExtension === 'jpg'
+			openedImage: e.target.src
 		});
 	}
 
@@ -53,7 +48,7 @@ class Album extends React.Component {
 
 	render = () => {
 		const { album, error, fetching } = this.props;
-		const { modalIsOpen, openedImage, isJpg } = this.state;
+		const { modalIsOpen, openedImage } = this.state;
 
 		if (error !== null) {
 			return <div className="error">COULD NOT LOAD</div>;
@@ -79,19 +74,12 @@ class Album extends React.Component {
 		return (
 			<div className="album-container">
 				<div className="album">
-					{album
-						.map((image, index) => {
-							const i = image.lastIndexOf(".");
-							const fileExtension = image.slice(i+1, i+4);
-
-							return (
-								<div className='thumbnail' key={image} onKeyDown={this.onKeyPress} tabIndex={index}> {
-									fileExtension === 'jpg' ? 
-										<img alt={image} className='content' key={index} onClick={this.onClick} src={image}/> :
-										<video className='content' key={index} onClick={this.onClick} src={image}/>
-									}
-								</div>
-							);
+					{album.map((image, index) => {
+						return (
+							<div className='thumbnail' key={image} onKeyDown={this.onKeyPress} tabIndex={index}> 
+								<img alt={image} className='content' key={index} onClick={this.onClick} src={image}/>
+							</div>
+						);
 					})}
 				</div>
 				<Modal 
@@ -100,13 +88,7 @@ class Album extends React.Component {
 					onRequestClose={this.closeModal}
 					overlayClassName="modal-overlay"
 				>
-					{ isJpg 
-						? <img src={openedImage} alt={openedImage}/>
-						: (
-							<video autoPlay controls loop src={openedImage} width='auto'>
-							</video>
-						)
-					}
+					<img src={openedImage} alt={openedImage}/>
 				</Modal>
 			</div>
 		);

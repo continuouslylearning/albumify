@@ -1,6 +1,7 @@
 import DropZone from 'react-dropzone';
 import React from 'react'
 import { connect } from 'react-redux';
+import { ToastContainer, toast } from 'react-toastify';
 
 import Album from './Album';
 import { getAlbum, postImages} from './actions/album';
@@ -12,7 +13,18 @@ const style = {
 
 class AlbumContainer extends React.Component {
 	onDrop = (files) => {
-		return this.props.postImages(files)
+		const images = files.filter(file => {
+			return /image.*/.test(file.type);
+		});
+
+		if (files.length > images.length) {
+			toast.error('Only images can be uploaded', {
+				className: 'toast',
+				position: toast.POSITION.BOTTOM_CENTER
+			});
+		}
+
+		return this.props.postImages(images)
 			.then(() => this.props.getAlbum());
 	}
 
@@ -25,6 +37,17 @@ class AlbumContainer extends React.Component {
 				{ ({getRootProps, getInputProps}) => 
 					(   
 						<div {...getInputProps({ style })} {...getRootProps()}>
+							<ToastContainer
+								autoClose={5000}
+								closeOnClick
+								draggable
+								hideProgressBar={false}
+								newestOnTop={false}
+								pauseOnHover
+								pauseOnVisibilityChange
+								position="top-right"
+								rtl={false}
+							/>
 							<Album/>
 						</div>
 					)
@@ -34,12 +57,6 @@ class AlbumContainer extends React.Component {
 	}
 }
 
-const mapStateToProps = (state) => {
-	return {
-
-	};
-};
-
 const mapDispatchToProps = (dispatch) => {
 	return {
 		getAlbum: () => dispatch(getAlbum()),
@@ -47,4 +64,4 @@ const mapDispatchToProps = (dispatch) => {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AlbumContainer);
+export default connect(null, mapDispatchToProps)(AlbumContainer);

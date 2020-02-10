@@ -10,7 +10,7 @@
 	padding-bottom: 100%;
 }
   
-.thumbnail img, .thumbnail video {
+.thumbnail img {
 	bottom: 0;
 	height: 100%;
 	left: 0;
