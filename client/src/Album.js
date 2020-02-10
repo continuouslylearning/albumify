@@ -4,6 +4,7 @@ import { CircleLoader as Loader } from "react-spinners";
 import { connect } from 'react-redux';
 import { getAlbum } from './actions/album';
 import './Album.css';
+import dragAndDrop from './images/draganddrop.png';
 
 Modal.setAppElement('body');
 
@@ -53,6 +54,15 @@ class Album extends React.Component {
 					<Loader loading={fetching}/>
 				</div>
 			);		
+		}
+
+		if (album.length === 0) {
+			return (
+				<div className='drag-and-drop'>
+					<img alt={dragAndDrop} src={dragAndDrop}/>
+					<span>Drag your image files into the dashboard</span>
+				</div>
+			)
 		}
 
 		return (

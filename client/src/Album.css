@@ -141,3 +141,22 @@
 	z-index: 2;
 }
 
+.drag-and-drop {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	justify-content: center;
+	min-height: 100vh;
+	width: 100%;
+}
+
+.drag-and-drop span {
+	display: block;
+	font-family: 'Dancing Script', 'cursive';
+	font-size: 20px;
+}
+
+.drag-and-drop img {
+	max-width: 95vw;
+}
