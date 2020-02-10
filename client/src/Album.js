@@ -63,13 +63,13 @@ class Album extends React.Component {
 							const i = image.lastIndexOf(".");
 							const fileExtension = image.slice(i+1, i+4);
 
-							if (fileExtension === 'jpg') {
-								return (
-									<img alt={image} className='thumbnail' key={index} onClick={this.onClick} src={image}/>
-								);
-							}
 							return (
-								<video className='thumbnail' key={index} onClick={this.onClick} src={image}/>
+								<div className='thumbnail' key={image}> {
+									fileExtension === 'jpg' ? 
+										<img alt={image} className='thumbnail' key={index} onClick={this.onClick} src={image}/> :
+										<video className='thumbnail' key={index} onClick={this.onClick} src={image}/>
+									}
+								</div>
 							);
 					})}
 				</div>

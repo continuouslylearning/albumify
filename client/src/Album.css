@@ -1,9 +1,25 @@
 .thumbnail {
-	height: 310px;
-	margin-bottom: 20px;
-	margin-top: 20px;
+	margin-top: 3.33%;
+	position: relative;
+	width: 30%;
+  }
+
+.thumbnail:after {
+	content: "";
+	display: block;
+	padding-bottom: 100%;
+}
+  
+.thumbnail img, .thumbnail video {
+	bottom: 0;
+	height: 100%;
+	left: 0;
 	object-fit: cover;
-	width: 310px;
+	object-position: center;
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 100%;
 }
 
 .thumbnail:hover {
