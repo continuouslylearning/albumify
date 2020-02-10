@@ -61,5 +61,9 @@ export const login = ({ username, password }) => async (dispatch, getState) => {
 		}
 
 		dispatch(authError({ message }));
+
+		throw new SubmissionError({
+				_error: message
+		});
 	}
 };

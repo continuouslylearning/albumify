@@ -1,4 +1,5 @@
 import { AUTH_ERROR, AUTH_REQUEST, AUTH_SUCCESS, CLEAR_AUTH, SET_AUTH_TOKEN } from '../actions/auth';
+import { clearAuthToken } from '../utils';
 
 const initialState = {
 	authToken: null,
@@ -27,6 +28,8 @@ export default (state = initialState, action) => {
 			user: action.user
 		};
 	} else if (action.type === CLEAR_AUTH) {
+		clearAuthToken();
+		
 		return {
 			...state,
 			authToken: null,

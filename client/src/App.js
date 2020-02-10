@@ -18,7 +18,11 @@ class App extends React.Component {
             );
         }
 
-        return <Landing/>;
+        return (
+            <>
+                <Landing/>
+            </>
+        );
     };
 }
 

@@ -36,7 +36,7 @@
 	display: grid;
 	flex-direction: column;
 	grid-column-start: 2;
-	grid-template-rows: 35% 45% 1fr;
+	grid-template-rows: 35% 35% 1fr;
 	height: 100%;
 	justify-content: center;
 	left: 0;
