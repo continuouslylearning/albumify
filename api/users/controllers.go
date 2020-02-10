@@ -20,17 +20,22 @@ func createUser(c *gin.Context) {
 
 	e := c.ShouldBindJSON(&newUser)
 	if e != nil {
-		c.AbortWithStatus(http.StatusBadRequest)
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"message": "Missing username or password",
+		})
 		return
 	}
 
 	e = db.Where("username = ?", newUser.Username).First(&User{}).Error
-	if e != nil {
-		c.AbortWithStatus(http.StatusBadRequest)
+	if e == nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"message": "This username is taken",
+		})
+		return
 	}
 
-	hash, _ := hashPassword(newUser.Password)
-	newUser.Password = hash
+	digest, _ := hashPassword(newUser.Password)
+	newUser.Password = digest
 	db.Create(&newUser)
 	c.JSON(http.StatusCreated, newUser.Normalize())
 }

@@ -9,7 +9,6 @@ class LoginForm extends React.Component {
 	handleLogin = (values) => {
 		return this.props.dispatch(login(values))
 			.catch(e => {
-				console.log(e);
 				toast.error(e.errors._error, {
 					className: 'toast'
 				});

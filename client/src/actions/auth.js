@@ -59,7 +59,7 @@ export const login = ({ username, password }) => async (dispatch, getState) => {
 		} else {
 			message = e.response.data.message;
 		}
-
+		console.log(message);
 		dispatch(authError({ message }));
 
 		throw new SubmissionError({

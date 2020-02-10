@@ -49,19 +49,25 @@ func localAuth(c *gin.Context) {
 
 	e := c.ShouldBind(&req)
 	if e != nil {
-		c.AbortWithStatus(http.StatusUnauthorized)
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+			"message": "Username or password is missing",
+		})
 		return
 	}
 
 	e = db.Where("username = ?", req.Username).Find(&user).First(&user).Error
 	if e != nil {
-		c.AbortWithStatus(http.StatusUnauthorized)
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+			"message": "User with this username does not exist",
+		})
 		return
 	}
 
 	valid := verifyPassword(user.Password, req.Password)
 	if !valid {
-		c.AbortWithStatus(http.StatusUnauthorized)
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+			"message": "Incorrect password",
+		})
 		return
 	}
 
