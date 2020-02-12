@@ -23,6 +23,8 @@ func main() {
 
 	database.InitializeDB(r)
 	database.InitializeS3Handler(r)
+	redis := database.InitializeRedis()
+	defer redis.Pool.Close()
 
 	users.GroupUserRoutes(r)
 	album.GroupAlbumRoutes(r)

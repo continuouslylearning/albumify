@@ -67,20 +67,28 @@ func (h S3Handler) GetImages(username string) ([]string, error) {
 		keys = append(keys, *object.Key)
 	}
 
-	images := make([]string, 0, len(keys))
+	var images []string
+	images, e = redisHandler.GetCachedURLs(keys)
+	if e != nil {
+		return nil, e
+	}
+
 	var signedURL string
-	for _, key := range keys {
+	for i, key := range keys {
 		req, _ := s3.New(h.Session).GetObjectRequest(&s3.GetObjectInput{
 			Bucket: aws.String(h.Bucket),
 			Key:    aws.String(key),
 		})
-		signedURL, e = req.Presign(60 * time.Minute)
-		if e != nil {
-			return nil, e
-		}
-		images = append(images, signedURL)
-	}
 
+		if len(images[i]) == 0 {
+			signedURL, e = req.Presign(60 * time.Minute)
+			if e != nil {
+				return nil, e
+			}
+			images[i] = signedURL
+		}
+	}
+	redisHandler.CacheURLs(keys, images)
 	return images, nil
 }
 
