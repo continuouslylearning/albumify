@@ -44,6 +44,7 @@
 	color: #990000;
 	cursor: pointer;
 	font-size: 17px;
+	margin-left: auto;
 	margin-top: 10px;
 	text-align: right;
 }

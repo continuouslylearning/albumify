@@ -36,8 +36,7 @@ export const deleteImage = (key) => async (dispatch, getState) => {
 			},
 			headers: {
 				'Authorization': `Bearer ${authToken}`,
-				'Content-Type': 'application/json',
-
+				'Content-Type': 'application/json'
 			}
 		});
 
