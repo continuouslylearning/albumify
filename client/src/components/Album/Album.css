@@ -1,6 +1,6 @@
 .thumbnail {
-	/* margin-top: 3.33%; */
 	position: relative;
+	transition: filter 1s;
 	width: 100%;
   }
 
@@ -79,10 +79,8 @@
 	grid-column: 2;
 	grid-gap: 30px;
 	grid-row: 2;
-	/* grid-row-gap: 5%; */
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-template-rows: 1fr 1fr 1fr;
-	/* height: 100%; */
 	justify-content: space-evenly;
 	margin-top: 4%;
 	margin-bottom: 4%;

@@ -2,10 +2,10 @@ import React from 'react';
 import Modal from 'react-modal';
 import { CircleLoader as Loader } from "react-spinners";
 import { connect } from 'react-redux';
-import { deleteImage, getAlbum } from './actions/album';
-import { getFileName } from './utils';
+import { deleteImage, getAlbum } from '../../actions/album';
+import { getFileName } from '../../utils';
 import './Album.css';
-import dragAndDrop from './images/draganddrop.png';
+import dragAndDrop from '../../images/draganddrop.png';
 
 Modal.setAppElement('body');
 

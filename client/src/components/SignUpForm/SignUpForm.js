@@ -1,7 +1,7 @@
 import React from 'react';
-import BaseForm from './BaseForm';
+import BaseForm from '../BaseForm/BaseForm';
 import { reduxForm } from 'redux-form';
-import { register } from './actions/auth';
+import { register } from '../../actions/auth';
 
 const SignUpForm = (props) => {
 	return (

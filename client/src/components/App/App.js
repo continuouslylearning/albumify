@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import AlbumContainer from './AlbumContainer';
-import Header from './Header';
-import Landing from './Landing';
+import AlbumContainer from '../AlbumContainer/AlbumContainer';
+import Header from '../Header/Header';
+import Landing from '../Landing/Landing';
 import './App.css';
 
 class App extends React.Component {
@@ -19,9 +19,7 @@ class App extends React.Component {
 		}
 
 		return (
-			<>
-				<Landing/>
-			</>
+			<Landing/>
 		);
 	};
 }

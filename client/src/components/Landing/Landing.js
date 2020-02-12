@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import LoginForm from './LoginForm';
 import { ToastContainer } from 'react-toastify';
+import LoginForm from '../LoginForm/LoginForm';
+import SignUpForm from '../SignUpForm/SignUpForm';
 import './Landing.css';
-import SignUpForm from './SignUpForm';
 
 class Landing extends React.Component {
 	constructor(props) {

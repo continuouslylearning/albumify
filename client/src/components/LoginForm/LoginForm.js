@@ -1,7 +1,7 @@
 import React from 'react';
-import BaseForm from './BaseForm';
+import BaseForm from '../BaseForm/BaseForm';
 import { reduxForm } from 'redux-form';
-import { login } from './actions/auth';
+import { login } from '../../actions/auth';
 
 const LoginForm = (props) => {
 	return (

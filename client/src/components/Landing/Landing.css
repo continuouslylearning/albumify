@@ -19,7 +19,7 @@
 
 .left {
 	animation: background-scroll 60s ease-in-out 1s infinite;
-	background-image: url('./images/background.jpg');
+	background-image: url('../../images/background.jpg');
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: auto 100%;

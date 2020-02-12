@@ -1,5 +1,5 @@
 header {
-	background-image: url('./images/background.jpg');
+	background-image: url('../../images/background.jpg');
 	color: white;
 	display: flex;
 	justify-content: center;
@@ -30,8 +30,6 @@ header {
 
 @media (max-width: 1024px) {
 	.header-items {
-		/* grid-template-columns: 5% 1fr 5%;
-		width: 100%; */
 		width: 90%;
 	}
 }

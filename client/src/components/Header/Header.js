@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { clearAuth } from './actions/auth';
+import { clearAuth } from '../../actions/auth';
+import logout from '../../images/logout.svg';
 import './Header.css';
-import logout from './images/logout.svg';
 
 const Header = (props) => {
 	return (

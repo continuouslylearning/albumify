@@ -2,9 +2,8 @@ import DropZone from 'react-dropzone';
 import React from 'react'
 import { connect } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
-
-import Album from './Album';
-import { getAlbum, postImages} from './actions/album';
+import Album from '../Album/Album';
+import { getAlbum, postImages } from '../../actions/album';
 
 const style = {
 	height: 'auto',
