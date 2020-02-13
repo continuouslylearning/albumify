@@ -1,6 +1,7 @@
 package database
 
 import (
+	"fmt"
 	"os"
 	"time"
 
@@ -62,5 +63,51 @@ func (r *RedisHandler) CacheURLs(keys []string, presignedURLS []string) error {
 	}
 	_, e = conn.Do("EXEC")
 
+	return e
+}
+
+func (r *RedisHandler) GetCachedAlbum(username string) ([]string, error) {
+	c := r.Pool.Get()
+	defer c.Close()
+
+	album, e := redis.Strings(c.Do("SMEMBERS", username))
+	if e != nil {
+		fmt.Println(e)
+		return nil, e
+	}
+
+	return album, e
+}
+
+func (r *RedisHandler) CacheAlbum(username string, album []string) error {
+	c := r.Pool.Get()
+	defer c.Close()
+
+	c.Send("MULTI")
+	for _, key := range album {
+		c.Send("SADD", username, key)
+	}
+
+	_, e := c.Do("EXEC")
+	if e != nil {
+		fmt.Println(e)
+	}
+
+	return e
+}
+
+func (r *RedisHandler) AddKeyToCache(username string, key string) error {
+	c := r.Pool.Get()
+	defer c.Close()
+
+	_, e := c.Do("SADD", username, key)
+	return e
+}
+
+func (r *RedisHandler) RemoveKeyFromCache(username string, key string) error {
+	c := r.Pool.Get()
+	defer c.Close()
+
+	_, e := c.Do("SREM", username, key)
 	return e
 }
