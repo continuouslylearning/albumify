@@ -66,17 +66,18 @@ func (r *RedisHandler) CacheURLs(keys []string, presignedURLS []string) error {
 	return e
 }
 
-func (r *RedisHandler) GetCachedAlbum(username string) ([]string, error) {
+func (r *RedisHandler) GetCachedAlbum(username string) ([]string, bool) {
 	c := r.Pool.Get()
 	defer c.Close()
 
-	album, e := redis.Strings(c.Do("SMEMBERS", username))
-	if e != nil {
-		fmt.Println(e)
-		return nil, e
-	}
+	c.Send("MULTI")
+	c.Send("EXISTS", username)
+	c.Send("SMEMBERS", username)
+	replies, _ := redis.Values(c.Do("EXEC"))
+	ok := replies[0].(bool)
+	album := replies[1].([]string)
 
-	return album, e
+	return album, ok
 }
 
 func (r *RedisHandler) CacheAlbum(username string, album []string) error {
