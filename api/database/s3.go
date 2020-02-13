@@ -52,23 +52,26 @@ func (h S3Handler) DeleteImage(key string, username string) error {
 }
 
 func (h S3Handler) GetImages(username string) ([]string, error) {
-	res, e := s3.New(h.Session).ListObjects(&s3.ListObjectsInput{
-		Bucket:    aws.String(h.Bucket),
-		Delimiter: aws.String("/"),
-		MaxKeys:   aws.Int64(18),
-		Prefix:    aws.String(fmt.Sprintf("%s/", username)),
-	})
-	if e != nil {
-		return nil, e
+	keys, ok := redisHandler.GetCachedAlbum(username)
+	if !ok {
+		res, e := s3.New(h.Session).ListObjects(&s3.ListObjectsInput{
+			Bucket:    aws.String(h.Bucket),
+			Delimiter: aws.String("/"),
+			MaxKeys:   aws.Int64(18),
+			Prefix:    aws.String(fmt.Sprintf("%s/", username)),
+		})
+		if e != nil {
+			return nil, e
+		}
+
+		for _, object := range res.Contents {
+			keys = append(keys, *object.Key)
+		}
+
+		redisHandler.CacheAlbum(username, keys)
 	}
 
-	var keys []string
-	for _, object := range res.Contents {
-		keys = append(keys, *object.Key)
-	}
-
-	var images []string
-	images, e = redisHandler.GetCachedURLs(keys)
+	images, e := redisHandler.GetCachedURLs(keys)
 	if e != nil {
 		return nil, e
 	}
