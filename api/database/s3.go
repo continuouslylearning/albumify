@@ -97,9 +97,10 @@ func (h S3Handler) GetImages(username string) ([]string, error) {
 }
 
 func (h S3Handler) UploadImage(key string, body []byte, username string) error {
+	key = fmt.Sprintf("%s/%s", username, key)
 	_, e := s3.New(h.Session).PutObject(&s3.PutObjectInput{
 		Bucket:               aws.String(h.Bucket),
-		Key:                  aws.String(fmt.Sprintf("%s/%s", username, key)),
+		Key:                  aws.String(key),
 		ACL:                  aws.String("private"),
 		Body:                 bytes.NewReader(body),
 		ContentLength:        aws.Int64(int64(len(body))),
@@ -107,6 +108,9 @@ func (h S3Handler) UploadImage(key string, body []byte, username string) error {
 		ContentDisposition:   aws.String("attachment"),
 		ServerSideEncryption: aws.String("AES256"),
 	})
+	if e == nil {
+		redisHandler.AddKeyToCache(username, key)
+	}
 
 	return e
 }

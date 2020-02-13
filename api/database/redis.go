@@ -104,8 +104,21 @@ func (r *RedisHandler) AddKeyToCache(username string, key string) error {
 	c := r.Pool.Get()
 	defer c.Close()
 
-	_, e := c.Do("SADD", username, key)
-	return e
+	ok, e := redis.Int64(c.Do("EXISTS", username))
+	if e != nil {
+		return e
+	}
+
+	if ok == 1 {
+		c.Send("MULTI")
+		c.Send("SADD", username, key)
+		c.Send("EXPIRE", username, 3000)
+		_, e = c.Do("EXEC")
+		if e != nil {
+			return e
+		}
+	}
+	return nil
 }
 
 func (r *RedisHandler) RemoveKeyFromCache(username string, key string) error {
