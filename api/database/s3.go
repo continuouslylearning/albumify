@@ -43,10 +43,14 @@ func AddS3Handler(h *S3Handler) gin.HandlerFunc {
 }
 
 func (h S3Handler) DeleteImage(key string, username string) error {
+	key = fmt.Sprintf("%s/%s", username, key)
 	_, e := s3.New(h.Session).DeleteObject(&s3.DeleteObjectInput{
 		Bucket: aws.String(h.Bucket),
-		Key:    aws.String(fmt.Sprintf("%s/%s", username, key)),
+		Key:    aws.String(key),
 	})
+	if e == nil {
+		redisHandler.RemoveKeyFromCache(username, key)
+	}
 
 	return e
 }
@@ -54,7 +58,6 @@ func (h S3Handler) DeleteImage(key string, username string) error {
 func (h S3Handler) GetImages(username string) ([]string, error) {
 	keys, ok := redisHandler.GetCachedAlbum(username)
 	if !ok {
-		fmt.Println("REQUEST TO S3. SHOULD NOT RUN")
 		res, e := s3.New(h.Session).ListObjects(&s3.ListObjectsInput{
 			Bucket:    aws.String(h.Bucket),
 			Delimiter: aws.String("/"),

@@ -125,6 +125,8 @@ func (r *RedisHandler) RemoveKeyFromCache(username string, key string) error {
 	c := r.Pool.Get()
 	defer c.Close()
 
-	_, e := c.Do("SREM", username, key)
+	c.Send("MULTI")
+	c.Send("SREM", username, key)
+	_, e := c.Do("EXEC")
 	return e
 }
