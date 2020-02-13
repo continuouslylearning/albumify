@@ -73,11 +73,14 @@ func (r *RedisHandler) GetCachedAlbum(username string) ([]string, bool) {
 	c.Send("MULTI")
 	c.Send("EXISTS", username)
 	c.Send("SMEMBERS", username)
+	c.Send("EXPIRE", username, 3000)
 	replies, _ := redis.Values(c.Do("EXEC"))
-	ok := replies[0].(bool)
-	album := replies[1].([]string)
-
-	return album, ok
+	exists := replies[0].(int64)
+	if exists == 0 {
+		return nil, false
+	}
+	album, _ := redis.Strings(replies[1], nil)
+	return album, true
 }
 
 func (r *RedisHandler) CacheAlbum(username string, album []string) error {
@@ -88,7 +91,7 @@ func (r *RedisHandler) CacheAlbum(username string, album []string) error {
 	for _, key := range album {
 		c.Send("SADD", username, key)
 	}
-
+	c.Send("EXPIRE", username, 3000)
 	_, e := c.Do("EXEC")
 	if e != nil {
 		fmt.Println(e)

@@ -54,6 +54,7 @@ func (h S3Handler) DeleteImage(key string, username string) error {
 func (h S3Handler) GetImages(username string) ([]string, error) {
 	keys, ok := redisHandler.GetCachedAlbum(username)
 	if !ok {
+		fmt.Println("REQUEST TO S3. SHOULD NOT RUN")
 		res, e := s3.New(h.Session).ListObjects(&s3.ListObjectsInput{
 			Bucket:    aws.String(h.Bucket),
 			Delimiter: aws.String("/"),
