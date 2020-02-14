@@ -34,10 +34,22 @@ func createUser(c *gin.Context) {
 		return
 	}
 
-	digest, _ := hashPassword(newUser.Password)
+	digest, e := hashPassword(newUser.Password)
+	if e != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
 	newUser.Password = digest
 	db.Create(&newUser)
-	token, _ := createToken(&newUser)
+
+	var token string
+	token, e = createToken(&newUser)
+	if e != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
 	c.JSON(http.StatusCreated, gin.H{
 		"authToken": token,
 	})

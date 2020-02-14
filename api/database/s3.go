@@ -51,7 +51,7 @@ func (h S3Handler) DeleteImage(key string, username string) error {
 	return e
 }
 
-func (h S3Handler) GetImages(username string) ([]string, error) {
+func (h S3Handler) GetAlbumKeys(username string) ([]string, error) {
 	res, e := s3.New(h.Session).ListObjects(&s3.ListObjectsInput{
 		Bucket:    aws.String(h.Bucket),
 		Delimiter: aws.String("/"),
@@ -67,29 +67,26 @@ func (h S3Handler) GetImages(username string) ([]string, error) {
 		keys = append(keys, *object.Key)
 	}
 
-	var images []string
-	images, e = redisHandler.GetCachedURLs(keys)
-	if e != nil {
-		return nil, e
-	}
+	return keys, nil
+}
 
-	var signedURL string
+func (h S3Handler) GetURLs(username string, keys []string, imageURLs []string) ([]string, error) {
 	for i, key := range keys {
-		req, _ := s3.New(h.Session).GetObjectRequest(&s3.GetObjectInput{
-			Bucket: aws.String(h.Bucket),
-			Key:    aws.String(key),
-		})
+		if len(imageURLs[i]) == 0 {
+			req, _ := s3.New(h.Session).GetObjectRequest(&s3.GetObjectInput{
+				Bucket: aws.String(h.Bucket),
+				Key:    aws.String(key),
+			})
 
-		if len(images[i]) == 0 {
-			signedURL, e = req.Presign(60 * time.Minute)
+			signedURL, e := req.Presign(60 * time.Minute)
 			if e != nil {
 				return nil, e
 			}
-			images[i] = signedURL
+
+			imageURLs[i] = signedURL
 		}
 	}
-	redisHandler.CacheURLs(keys, images)
-	return images, nil
+	return imageURLs, nil
 }
 
 func (h S3Handler) UploadImage(key string, body []byte, username string) error {

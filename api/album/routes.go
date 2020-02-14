@@ -7,8 +7,10 @@ import (
 
 func GroupAlbumRoutes(r *gin.Engine) {
 	albumRoutes := r.Group("/album")
-	albumRoutes.Use(users.JwtAuth())
-	albumRoutes.GET("/", getAlbum)
-	albumRoutes.DELETE("/", deleteImage)
-	albumRoutes.POST("/", postImages)
+	{
+		albumRoutes.Use(users.JwtAuth())
+		albumRoutes.GET("/", getAlbum)
+		albumRoutes.DELETE("/", deleteImage)
+		albumRoutes.POST("/", postImages)
+	}
 }
