@@ -8,7 +8,7 @@ import (
 	"github.com/gomodule/redigo/redis"
 )
 
-var redisHandler *RedisHandler
+var Redis *RedisHandler
 
 type RedisHandler struct {
 	Pool *redis.Pool
@@ -16,7 +16,7 @@ type RedisHandler struct {
 
 func InitializeRedis() *RedisHandler {
 	url := os.Getenv("REDIS_URL")
-	redisHandler = &RedisHandler{
+	Redis = &RedisHandler{
 		Pool: &redis.Pool{
 			Dial: func() (redis.Conn, error) {
 				return redis.DialURL(url)
@@ -26,7 +26,7 @@ func InitializeRedis() *RedisHandler {
 		},
 	}
 
-	return redisHandler
+	return Redis
 }
 
 func (r *RedisHandler) GetCachedURLs(keys []string) ([]string, error) {
@@ -37,12 +37,12 @@ func (r *RedisHandler) GetCachedURLs(keys []string) ([]string, error) {
 	for _, key := range keys {
 		conn.Send("GET", key)
 	}
-	reply, e := redis.Strings(conn.Do("EXEC"))
+	URLs, e := redis.Strings(conn.Do("EXEC"))
 	if e != nil {
 		return nil, e
 	}
 
-	return reply, nil
+	return URLs, nil
 }
 
 func (r *RedisHandler) CacheURLs(keys []string, presignedURLS []string) error {
@@ -93,14 +93,11 @@ func (r *RedisHandler) CacheAlbum(username string, album []string) error {
 	}
 	c.Send("EXPIRE", username, 3000)
 	_, e := c.Do("EXEC")
-	if e != nil {
-		fmt.Println(e)
-	}
 
 	return e
 }
 
-func (r *RedisHandler) AddKeyToCache(username string, key string) error {
+func (r *RedisHandler) AddKeysToCache(username string, keys []string) error {
 	c := r.Pool.Get()
 	defer c.Close()
 
@@ -111,13 +108,16 @@ func (r *RedisHandler) AddKeyToCache(username string, key string) error {
 
 	if ok == 1 {
 		c.Send("MULTI")
-		c.Send("SADD", username, key)
+		for _, key := range keys {
+			c.Send("SADD", username, fmt.Sprintf("%s/%s", username, key))
+		}
 		c.Send("EXPIRE", username, 3000)
 		_, e = c.Do("EXEC")
 		if e != nil {
 			return e
 		}
 	}
+
 	return nil
 }
 
@@ -126,7 +126,8 @@ func (r *RedisHandler) RemoveKeyFromCache(username string, key string) error {
 	defer c.Close()
 
 	c.Send("MULTI")
-	c.Send("SREM", username, key)
+	c.Send("SREM", username, fmt.Sprintf("%s/%s", username, key))
 	_, e := c.Do("EXEC")
+
 	return e
 }
