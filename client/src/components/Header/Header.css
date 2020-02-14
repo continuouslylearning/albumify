@@ -5,7 +5,7 @@ header {
 	justify-content: center;
 	align-items: center;
 	font-family: 'Dancing Script', 'cursive';
-	grid-template-columns: 20% 1fr 20%;
+	grid-template-columns: 1fr 1024px 1fr;
 	height: 80px;
 	position: fixed;
 	text-align: center;
@@ -28,7 +28,7 @@ header {
 	width: 100%;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1138px) {
 	.header-items {
 		width: 90%;
 	}
