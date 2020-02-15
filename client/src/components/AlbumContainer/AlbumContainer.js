@@ -10,7 +10,7 @@ const style = {
 	minHeight: '100%'
 };
 
-export default (props) => {
+export default () => {
 	const dispatch = useDispatch();
 	const onDrop = (files) => {
 		const images = files.filter(file => {
@@ -57,6 +57,5 @@ export default (props) => {
 			}   
 		</DropZone>
 	);
-
 }
 
