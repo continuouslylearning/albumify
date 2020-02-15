@@ -1,67 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import LoginForm from '../LoginForm/LoginForm';
 import SignUpForm from '../SignUpForm/SignUpForm';
 import './Landing.css';
 
-class Landing extends React.Component {
-	constructor(props) {
-		super(props);
-	
-		this.state = {
-			displayed: 'login'
-		};
-	}
+export default (props) => {
+	const [ displayed, setDisplayed ] = useState('login');
 
-	toggleForm = (form) => {
-		this.setState({
-			displayed: form
-		});
-	}
-
-	render = () => {
-		const { displayed } = this.state;
-
-		return (
-			<div className='landing'>
-				<div className='left'>
-				</div>
-				<div className='right'>
-					<div className='header'>
-						<h1>Albumify</h1>
-					</div>
-					<div className='form'>
-						{
-							displayed === 'login' ?
-							(
-								<>
-									<LoginForm/>
-									<span onClick={() => this.toggleForm('signUp')}>Sign up for an account</span>
-								</>
-							) : (
-								<>
-									<SignUpForm/>
-									<span onClick={() => this.toggleForm('login')}>Already have an account?</span>
-								</>
-							)
-						}
-					</div>
-					<ToastContainer
-						autoClose={5000}
-						closeOnClick
-						draggable
-						hideProgressBar={false}
-						newestOnTop={false}
-						pauseOnHover
-						pauseOnVisibilityChange
-						position="top-right"
-						rtl={false}
-					/>
-				</div>
+	return (
+		<div className='landing'>
+			<div className='left'>
 			</div>
-		);
-	}
+			<div className='right'>
+				<div className='header'>
+					<h1>Albumify</h1>
+				</div>
+				<div className='form'>
+					{
+						displayed === 'login' ?
+						(
+							<>
+								<LoginForm/>
+								<span onClick={() => setDisplayed('signUp')}>Sign up for an account</span>
+							</>
+						) : (
+							<>
+								<SignUpForm/>
+								<span onClick={() => setDisplayed('login')}>Already have an account?</span>
+							</>
+						)
+					}
+				</div>
+				<ToastContainer
+					autoClose={5000}
+					closeOnClick
+					draggable
+					hideProgressBar={false}
+					newestOnTop={false}
+					pauseOnHover
+					pauseOnVisibilityChange
+					position="top-right"
+					rtl={false}
+				/>
+			</div>
+		</div>
+	);
 }
-
-export default connect()(Landing);
