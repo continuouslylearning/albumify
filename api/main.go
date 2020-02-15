@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/continuouslylearning/albumify/api/album"
-	"github.com/continuouslylearning/albumify/api/database"
-	"github.com/continuouslylearning/albumify/api/users"
+	"albumify/album"
+	"albumify/db"
+	"albumify/users"
 
 	"os"
 
@@ -21,9 +21,9 @@ func main() {
 		AllowHeaders: []string{"Authorization", "Content-Length", "Content-Type", "Origin"},
 	}))
 
-	database.InitializeDB(r)
-	database.InitializeS3Handler(r)
-	redis := database.InitializeRedis()
+	db.InitializeDB(r)
+	db.InitializeS3Handler(r)
+	redis := db.InitializeRedis(r)
 	defer redis.Pool.Close()
 
 	users.GroupUserRoutes(r)

@@ -1,7 +1,8 @@
 package album
 
 import (
-	"github.com/continuouslylearning/albumify/api/users"
+	"albumify/users"
+
 	"github.com/gin-gonic/gin"
 )
 

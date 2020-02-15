@@ -1,22 +1,21 @@
-package database
+package db
 
 import (
 	"fmt"
 	"os"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/gomodule/redigo/redis"
 )
-
-var Redis *RedisHandler
 
 type RedisHandler struct {
 	Pool *redis.Pool
 }
 
-func InitializeRedis() *RedisHandler {
+func InitializeRedis(r *gin.Engine) *RedisHandler {
 	url := os.Getenv("REDIS_URL")
-	Redis = &RedisHandler{
+	h := &RedisHandler{
 		Pool: &redis.Pool{
 			Dial: func() (redis.Conn, error) {
 				return redis.DialURL(url)
@@ -25,8 +24,16 @@ func InitializeRedis() *RedisHandler {
 			MaxIdle:     3,
 		},
 	}
+	r.Use(AddRedisHandler(h))
 
-	return Redis
+	return h
+}
+
+func AddRedisHandler(h *RedisHandler) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Set("redis", h)
+		c.Next()
+	}
 }
 
 func (r *RedisHandler) GetCachedURLs(keys []string) ([]string, error) {

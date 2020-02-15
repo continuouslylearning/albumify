@@ -4,13 +4,16 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	. "github.com/continuouslylearning/albumify/api/database"
+	. "albumify/db"
+
 	"github.com/gin-gonic/gin"
 )
 
 func deleteImage(c *gin.Context) {
 	username := c.MustGet("username").(string)
 	s3 := c.MustGet("s3").(*S3Handler)
+	redis := c.MustGet("redis").(*RedisHandler)
+
 	var req DeleteRequest
 	e := c.ShouldBind(&req)
 	if e != nil {
@@ -27,7 +30,7 @@ func deleteImage(c *gin.Context) {
 		return
 	}
 
-	e = Redis.RemoveKeyFromCache(username, key)
+	e = redis.RemoveKeyFromCache(username, key)
 	if e != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
@@ -39,8 +42,9 @@ func deleteImage(c *gin.Context) {
 func getAlbum(c *gin.Context) {
 	username := c.MustGet("username").(string)
 	s3 := c.MustGet("s3").(*S3Handler)
+	redis := c.MustGet("redis").(*RedisHandler)
 
-	keys, ok, e := Redis.GetCachedAlbum(username)
+	keys, ok, e := redis.GetCachedAlbum(username)
 	if e != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
@@ -51,14 +55,14 @@ func getAlbum(c *gin.Context) {
 			return
 		}
 
-		e = Redis.CacheAlbum(username, keys)
+		e = redis.CacheAlbum(username, keys)
 		if e != nil {
 			c.AbortWithStatus(http.StatusInternalServerError)
 			return
 		}
 	}
 
-	imageURLs, e := Redis.GetCachedURLs(keys)
+	imageURLs, e := redis.GetCachedURLs(keys)
 	if e != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
@@ -70,7 +74,7 @@ func getAlbum(c *gin.Context) {
 		return
 	}
 
-	e = Redis.CacheURLs(keys, imageURLs)
+	e = redis.CacheURLs(keys, imageURLs)
 	if e != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
@@ -82,6 +86,7 @@ func getAlbum(c *gin.Context) {
 func postImages(c *gin.Context) {
 	username := c.MustGet("username").(string)
 	s3 := c.MustGet("s3").(*S3Handler)
+	redis := c.MustGet("redis").(*RedisHandler)
 	form, _ := c.MultipartForm()
 
 	var images [][]byte
@@ -101,7 +106,7 @@ func postImages(c *gin.Context) {
 		}
 	}
 
-	e := Redis.AddKeysToCache(username, keys)
+	e := redis.AddKeysToCache(username, keys)
 	if e != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
