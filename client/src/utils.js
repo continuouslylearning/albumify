@@ -19,9 +19,5 @@ export const saveAuthToken = (authToken) => {
 };
 
 export const getFileName = (URL) => {
-	let fileName;
-	fileName = URL.split('/').pop();
-	fileName = fileName.split('?')[0];
-
-	return fileName;
+	return URL.split('/').pop().split('?')[0];
 };

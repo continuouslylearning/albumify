@@ -109,7 +109,7 @@ func (r *RedisHandler) CacheAlbum(username string, album []string) error {
 	return e
 }
 
-func (r *RedisHandler) AddKeysToCache(username string, keys []string) error {
+func (r *RedisHandler) AddKeys(username string, keys []string) error {
 	c := r.Pool.Get()
 	defer c.Close()
 
@@ -133,7 +133,7 @@ func (r *RedisHandler) AddKeysToCache(username string, keys []string) error {
 	return nil
 }
 
-func (r *RedisHandler) RemoveKeyFromCache(username string, key string) error {
+func (r *RedisHandler) RemoveKey(username string, key string) error {
 	c := r.Pool.Get()
 	defer c.Close()
 

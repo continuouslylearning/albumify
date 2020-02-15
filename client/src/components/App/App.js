@@ -17,7 +17,5 @@ export default () => {
 		);
 	}
 
-	return (
-		<Landing/>
-	);
+	return <Landing/>;
 }

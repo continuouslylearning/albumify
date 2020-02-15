@@ -15,8 +15,7 @@ export default (state = initialState, action) => {
 		return {
 			...state,
 			error: action.error,
-			fetching: false,
-			album: []
+			fetching: false
 		};
 	} else if (action.type === GET_ALBUM_REQUEST) {
 		return {

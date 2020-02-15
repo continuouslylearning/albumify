@@ -40,7 +40,7 @@ const storeAuthInfo = (authToken, dispatch) => {
 	saveAuthToken(authToken);
 };
 
-export const login = ({ username, password }) => async (dispatch, getState) => {
+export const login = ({ username, password }) => async (dispatch) => {
 	try {
 		const res = await axios({
 			method: 'POST',
@@ -59,12 +59,12 @@ export const login = ({ username, password }) => async (dispatch, getState) => {
 		}
 
 		throw new SubmissionError({
-				_error: message
+			_error: message
 		});
 	}
 };
 
-export const register = ({ username, password }) => async (dispatch, getState) => {
+export const register = ({ username, password }) => async (dispatch) => {
 	try {
 		const res = await axios({
 			method: 'POST',
@@ -83,7 +83,7 @@ export const register = ({ username, password }) => async (dispatch, getState) =
 		}
 
 		throw new SubmissionError({
-				_error: message
+			_error: message
 		});
 	}
 };

@@ -34,10 +34,7 @@ export default () => {
 	}
 
 	return (
-		<DropZone
-			onDrop={onDrop}
-			style={style}
-		>   
+		<DropZone onDrop={onDrop} style={style}>   
 			{ ({getRootProps, getInputProps}) => 
 				(   
 					<div {...getInputProps({ style })} {...getRootProps()}>
