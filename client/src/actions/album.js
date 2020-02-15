@@ -130,6 +130,6 @@ export const postImages = (images) => async (dispatch, getState) => {
 		
 		dispatch(postImagesSuccess(data));
 	} catch(e) {
-		dispatch(e);
+		dispatch(postImagesError(e));
 	}
 }
