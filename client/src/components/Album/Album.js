@@ -15,7 +15,6 @@ export default () => {
 	const dispatch = useDispatch();
 
 	const album = useSelector(state => state.album.album);
-	const error = useSelector(state => state.album.error);
 	const fetching = useSelector(state => state.album.fetching);
 
 	useEffect(() => {
@@ -35,10 +34,6 @@ export default () => {
 			return dispatch(deleteImage(imageKey))
 				.then(() => dispatch(getAlbum()));
 		}
-	}
-
-	if (error !== null) {
-		return <div className="error">COULD NOT LOAD</div>;
 	}
 
 	if (fetching) {
