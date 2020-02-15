@@ -5,6 +5,8 @@ import (
 	"net/http"
 
 	. "albumify/db"
+	"context"
+	"sync"
 
 	"github.com/gin-gonic/gin"
 )
@@ -30,7 +32,7 @@ func deleteImage(c *gin.Context) {
 		return
 	}
 
-	e = redis.RemoveKeyFromCache(username, key)
+	e = redis.RemoveKey(username, key)
 	if e != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
@@ -98,19 +100,51 @@ func postImages(c *gin.Context) {
 		keys = append(keys, key)
 	}
 
+	var wg sync.WaitGroup
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	wg.Add(len(images) + 1)
+
 	for i, image := range images {
-		e := s3.UploadImage(keys[i], image, username)
-		if e != nil {
-			c.AbortWithStatus(http.StatusInternalServerError)
-			return
-		}
+		go func(key string, image []byte) {
+			defer wg.Done()
+
+			select {
+			case <-ctx.Done():
+				return
+			default:
+			}
+
+			e := s3.UploadImage(key, image, username)
+			if e != nil {
+				cancel()
+				return
+			}
+		}(keys[i], image)
 	}
 
-	e := redis.AddKeysToCache(username, keys)
-	if e != nil {
+	go func() {
+		defer wg.Done()
+
+		select {
+		case <-ctx.Done():
+			return
+		default:
+		}
+
+		e := redis.AddKeys(username, keys)
+		if e != nil {
+			cancel()
+			return
+		}
+	}()
+
+	wg.Wait()
+
+	if ctx.Err() != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
-
 	c.AbortWithStatus(http.StatusCreated)
 }
