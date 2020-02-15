@@ -1,24 +1,18 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { clearAuth } from '../../actions/auth';
 import logout from '../../images/logout.svg';
 import './Header.css';
 
-const Header = (props) => {
+export default () => {
+	const dispatch = useDispatch();
+
 	return (
 		<header>
 			<div className="header-items">
 				<h1>Albumify</h1>
-				<img alt={logout} onClick={() => props.logout()} src={logout}/>
+				<img alt={logout} onClick={() => dispatch(clearAuth())} src={logout}/>
 			</div>
 		</header>
 	);
 };
-
-const mapDispatchToProps = (dispatch) => {
-	return {
-		logout: () => dispatch(clearAuth())
-	};
-};
-
-export default connect(null, mapDispatchToProps)(Header);
