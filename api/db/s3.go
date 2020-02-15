@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/gin-gonic/gin"
 )
 
@@ -91,15 +92,38 @@ func (h S3Handler) GetURLs(username string, keys []string, imageURLs []string) (
 
 func (h S3Handler) UploadImage(key string, body []byte, username string) error {
 	_, e := s3.New(h.Session).PutObject(&s3.PutObjectInput{
-		Bucket:               aws.String(h.Bucket),
-		Key:                  aws.String(fmt.Sprintf("%s/%s", username, key)),
-		ACL:                  aws.String("private"),
-		Body:                 bytes.NewReader(body),
-		ContentLength:        aws.Int64(int64(len(body))),
-		ContentType:          aws.String(http.DetectContentType(body)),
-		ContentDisposition:   aws.String("attachment"),
-		ServerSideEncryption: aws.String("AES256"),
+		Bucket:             aws.String(h.Bucket),
+		Key:                aws.String(fmt.Sprintf("%s/%s", username, key)),
+		ACL:                aws.String("private"),
+		Body:               bytes.NewReader(body),
+		ContentLength:      aws.Int64(int64(len(body))),
+		ContentType:        aws.String(http.DetectContentType(body)),
+		ContentDisposition: aws.String("attachment"),
 	})
 
 	return e
+}
+
+func (h S3Handler) UploadImages(keys []string, images [][]byte, username string) error {
+	var objects []s3manager.BatchUploadObject
+
+	for i, key := range keys {
+		body := images[i]
+		objects = append(objects, s3manager.BatchUploadObject{
+			Object: &s3manager.UploadInput{
+				Bucket:             aws.String(h.Bucket),
+				Key:                aws.String(fmt.Sprintf("%s/%s", username, key)),
+				ACL:                aws.String("private"),
+				Body:               bytes.NewReader(body),
+				ContentDisposition: aws.String("attachment"),
+				ContentType:        aws.String(http.DetectContentType(body)),
+			},
+		})
+	}
+
+	iter := &s3manager.UploadObjectsIterator{
+		Objects: objects,
+	}
+
+	return s3manager.NewUploader(h.Session).UploadWithIterator(aws.BackgroundContext(), iter)
 }

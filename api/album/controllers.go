@@ -104,25 +104,23 @@ func postImages(c *gin.Context) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	wg.Add(len(images) + 1)
+	wg.Add(2)
 
-	for i, image := range images {
-		go func(key string, image []byte) {
-			defer wg.Done()
+	go func() {
+		wg.Done()
 
-			select {
-			case <-ctx.Done():
-				return
-			default:
-			}
+		select {
+		case <-ctx.Done():
+			return
+		default:
+		}
 
-			e := s3.UploadImage(key, image, username)
-			if e != nil {
-				cancel()
-				return
-			}
-		}(keys[i], image)
-	}
+		e := s3.UploadImages(keys, images, username)
+		if e != nil {
+			cancel()
+			return
+		}
+	}()
 
 	go func() {
 		defer wg.Done()
@@ -132,7 +130,6 @@ func postImages(c *gin.Context) {
 			return
 		default:
 		}
-
 		e := redis.AddKeys(username, keys)
 		if e != nil {
 			cancel()
@@ -141,10 +138,56 @@ func postImages(c *gin.Context) {
 	}()
 
 	wg.Wait()
-
 	if ctx.Err() != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
+
+	// var wg sync.WaitGroup
+	// ctx, cancel := context.WithCancel(context.Background())
+	// defer cancel()
+
+	// wg.Add(len(images) + 1)
+
+	// for i, image := range images {
+	// 	go func(key string, image []byte) {
+	// 		defer wg.Done()
+
+	// 		select {
+	// 		case <-ctx.Done():
+	// 			return
+	// 		default:
+	// 		}
+
+	// 		e := s3.UploadImage(key, image, username)
+	// 		if e != nil {
+	// 			cancel()
+	// 			return
+	// 		}
+	// 	}(keys[i], image)
+	// }
+
+	// go func() {
+	// 	defer wg.Done()
+
+	// 	select {
+	// 	case <-ctx.Done():
+	// 		return
+	// 	default:
+	// 	}
+
+	// 	e := redis.AddKeys(username, keys)
+	// 	if e != nil {
+	// 		cancel()
+	// 		return
+	// 	}
+	// }()
+
+	// wg.Wait()
+
+	// if ctx.Err() != nil {
+	// 	c.AbortWithStatus(http.StatusInternalServerError)
+	// 	return
+	// }
 	c.AbortWithStatus(http.StatusCreated)
 }
