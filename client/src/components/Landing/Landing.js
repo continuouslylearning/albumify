@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import LoginForm from '../LoginForm/LoginForm';
 import SignUpForm from '../SignUpForm/SignUpForm';
 import './Landing.css';
 
-export default (props) => {
+export default () => {
 	const [ displayed, setDisplayed ] = useState('login');
 
 	return (
